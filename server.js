@@ -1,8 +1,14 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongodb = require('./db/connect');
-const app = express();
+const session = require('express-session');
+const passport = require('passport');
+const gitHubStrategy = require('passport-github').Strategy;
+const cors = require('cors');
+
 const port = 3000;
+const app = express();
+
 
 // Import routes
 const routes = require('./routes');
@@ -10,14 +16,51 @@ const e = require('express');
 
 
 // Use routes
-app.use(bodyParser.json());
-app.use((req, res, next) => {
+app
+
+    .use(bodyParser.json())
+    .use(session({
+    secret: "secret",
+    resave: false,
+    saveUninitialized: true
+}))
+    .use(passport.initialize())
+    .use(passport.session())
+    .use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Z-key');
     next();
+})
+    .use(cors({method: ['GET', 'POST', 'PUT', 'DELETE']}))
+    .use(cors({origin: '*'}))
+    .use('/', require('./routes'));
+
+
+passport.use(new gitHubStrategy({
+    clientID: process.env.GITHUB_CLIENT_ID,
+    clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    callbackURL: process.env.GITHUB_CALLBACK_URL 
+}, (accessToken, refreshToken, profile, done) => {
+    return done(null, profile);
+},
+    function(accessToken, refreshToken, profile, done) {
+        return done(null, profile);
+}));
+
+passport.serializeUser((user, done) => {
+    done(null, user);
 });
-app.use('/', routes);
+passport.deserializeUser((user, done) => {
+    done(null, user);
+});
+
+app.get('/', (req, res) => { res.send(req.session.user !== undefined ? `logged in as ${req.session.user.displayName}` : "Not logged in") });
+
+app.get('/auth/github/callback', passport.authenticate('github', { failureRedirect: '/api-docs', session: false }), (req, res) => {
+    req.session.user = req.user;
+    res.redirect('/');
+});
 
 
 mongodb.initDB((err, db) => {
