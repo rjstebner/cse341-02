@@ -43,140 +43,103 @@
         "tags": [
           "Users"
         ],
-        "description": "Create a new user",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "firstName": {
-                  "example": "John"
-                },
-                "lastName": {
-                  "example": "Doe"
-                },
-                "email": {
-                  "example": "john.doe@example.com"
-                },
-                "birthday": {
-                  "example": "1990-01-01"
-                },
-                "address": {
-                  "type": "object",
-                  "properties": {
-                    "street": {
-                      "example": "123 Main St"
-                    },
-                    "city": {
-                      "example": "Anytown"
-                    },
-                    "state": {
-                      "example": "CA"
+          "swagger": "2.0",
+          "info": {
+            "description": "This is a sample server for a user management system.",
+            "version": "1.0.0",
+            "title": "User Management API"
+          },
+          "host": "example.com",
+          "basePath": "/v1",
+          "schemes": [
+            "https"
+          ],
+          "paths": {
+            "/users": {
+              "post": {
+                "tags": [
+                  "Users"
+                ],
+                "description": "Create a new user",
+                "parameters": [
+                  {
+                    "name": "body",
+                    "in": "body",
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "firstName": {
+                          "example": "Mat"
+                        },
+                        "lastName": {
+                          "example": "Cauthon"
+                        },
+                        "email": {
+                          "example": "mat.cauthon@example.com"
+                        },
+                        "birthday": {
+                          "example": "1980-04-17"
+                        },
+                        "address": {
+                          "type": "object",
+                          "properties": {
+                            "street": {
+                              "example": "Two Rivers"
+                            },
+                            "city": {
+                              "example": "Emond's Field"
+                            },
+                            "state": {
+                              "example": "Andor"
+                            }
+                          }
+                        }
+                      }
                     }
+                  }
+                ],
+                "responses": {
+                  "200": {
+                    "description": "OK"
+                  },
+                  "500": {
+                    "description": "Internal Server Error"
+                  }
+                }
+              }
+            },
+            "/users/{id}": {
+              "get": {
+                "tags": [
+                  "Users"
+                ],
+                "description": "Get a user by ID",
+                "produces": [
+                  "application/json"
+                ],
+                "parameters": [
+                  {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                  }
+                ],
+                "responses": {
+                  "200": {
+                    "description": "OK"
+                  },
+                  "404": {
+                    "description": "Not Found"
+                  },
+                  "500": {
+                    "description": "Internal Server Error"
                   }
                 }
               }
             }
           }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/users/{id}": {
-      "get": {
-        "tags": [
-          "Users"
-        ],
-        "description": "Get a user by ID",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "Users"
-        ],
-        "description": "Update a user by ID",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "firstName": {
-                  "example": "John"
-                },
-                "lastName": {
-                  "example": "Doe"
-                },
-                "email": {
-                  "example": "john.doe@example.com"
-                },
-                "birthday": {
-                  "example": "1990-01-01"
-                },
-                "address": {
-                  "type": "object",
-                  "properties": {
-                    "street": {
-                      "example": "123 Main St"
-                    },
-                    "city": {
-                      "example": "Anytown"
-                    },
-                    "state": {
-                      "example": "CA"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      },
+        },
       "delete": {
         "tags": [
           "Users"
